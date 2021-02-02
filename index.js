@@ -69,6 +69,11 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
     if(member.bot){
       return
     }
+    const queue = member.guild.client.queue.get(member.guild.id);
+    if(!queue.attention){
+      return
+    }
+  
     let vol=0;
     console.log(member,member.bot,speaking)
     if(speaking.equals(SILENCE)){
@@ -76,7 +81,7 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
     }else{
       vol=10;
     }
-    const queue = member.guild.client.queue.get(member.guild.id);
+
     
     //if (!queue) return message.reply(i18n.__("volume.errorNotQueue")).catch(console.error);
 
