@@ -1,4 +1,8 @@
 {
+  {
+  "attention":{
+    "result": "attention set to: **{arg}%**"
+  },
   "clip": {
     "description": "Plays a clip sound",
     "usagesReply": "Usage: /clip <name>",
