@@ -1,6 +1,6 @@
 {
   "attention":{
-    "result": "attention set to: **{arg}%**"
+    "result": "attention set to: **{arg}**"
   },
   "clip": {
     "description": "Plays a clip sound",
