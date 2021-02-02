@@ -62,13 +62,14 @@ module.exports = {
     const dispatcher = queue.connection
       .play(stream, { type: streamType })
       .on('speaking', (user, speaking) => {
-            console.log("Speaking",user,speaking)
+            if(user.bot){
+              return
+            }
+            console.log("Speaking",user,user.name,user.id,speaking)
             if (!speaking){
-                message.channel.send('no speaking')
                 dispatcher.setVolumeLogarithmic(20 / 100);
                 return
             }
-            message.channel.send('speaking')
             dispatcher.setVolumeLogarithmic(10 / 100);
             //const audioStream = receiver.createPCMStream(user)
            //More code to do stuff with the audioStream
