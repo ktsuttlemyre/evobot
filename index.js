@@ -66,11 +66,14 @@ for (const file of commandFiles) {
 }
 
 client.on("guildMemberSpeaking", async (member,speaking) => {
+    if(member.bot){
+      return
+    }
     let vol=0;
     console.log(member,member.bot,speaking)
-    if(speaking.has(Discord.Speaking.SPEAKING) ||
-      speaking.has(Discord.Speaking.SOUNDSHARE) ||
-      speaking.has(Discord.Speaking.PRIORITY_SPEAKING)){
+    if(speaking.any(Discord.Speaking.SPEAKING) ||
+      speaking.any(Discord.Speaking.SOUNDSHARE) ||
+      speaking.any(Discord.Speaking.PRIORITY_SPEAKING)){
       vol=10;
     }else{
       vol=40;
@@ -79,7 +82,7 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
     
     //if (!queue) return message.reply(i18n.__("volume.errorNotQueue")).catch(console.error);
 
-    vol=Math.min(100,Math.max(0,vol))
+    vol=Math.min(100,Math.max(0,vol));
 
     queue.volume = vol;
     queue.connection.dispatcher.setVolumeLogarithmic(vol / 100);
