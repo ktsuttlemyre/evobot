@@ -64,7 +64,7 @@ for (const file of commandFiles) {
   const command = require(join(__dirname, "commands", `${file}`));
   client.commands.set(command.name, command);
 }
-const SILENCE=new Discord.Speaking([0]);
+const SILENCE=new Discord.Speaking(0);
 client.on("guildMemberSpeaking", async (member,speaking) => {
     if(member.bot){
       return
