@@ -64,19 +64,17 @@ for (const file of commandFiles) {
   const command = require(join(__dirname, "commands", `${file}`));
   client.commands.set(command.name, command);
 }
-
+const SILENCE=new Discord.Speaking([0]);
 client.on("guildMemberSpeaking", async (member,speaking) => {
     if(member.bot){
       return
     }
     let vol=0;
     console.log(member,member.bot,speaking)
-    if(speaking.any(Discord.Speaking.SPEAKING) ||
-      speaking.any(Discord.Speaking.SOUNDSHARE) ||
-      speaking.any(Discord.Speaking.PRIORITY_SPEAKING)){
-      vol=10;
-    }else{
+    if(speaking.equals(SILENCE){
       vol=40;
+    }else{
+      vol=10;
     }
     const queue = member.guild.client.queue.get(member.guild.id);
     
