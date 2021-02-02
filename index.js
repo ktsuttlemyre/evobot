@@ -82,7 +82,7 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
 
     queue.volume = vol;
     queue.connection.dispatcher.setVolumeLogarithmic(vol / 100);
-};
+});
 
 client.on("message", async (message) => {
   if (message.author.bot) return;
