@@ -61,19 +61,19 @@ module.exports = {
 
     const dispatcher = queue.connection
       .play(stream, { type: streamType })
-      .on('speaking', (user, speaking) => {
-            if(user.bot){
-              return
-            }
-            console.log("Speaking",user,user.name,user.id,speaking)
-            if (!speaking){
-                dispatcher.setVolumeLogarithmic(20 / 100);
-                return
-            }
-            dispatcher.setVolumeLogarithmic(10 / 100);
-            //const audioStream = receiver.createPCMStream(user)
-           //More code to do stuff with the audioStream
-      })
+//       .on('speaking', (user, speaking) => {
+//             if(user.bot){
+//               return
+//             }
+//             console.log("Speaking",user,user.name,user.id,speaking)
+//             if (!speaking){
+//                 dispatcher.setVolumeLogarithmic(20 / 100);
+//                 return
+//             }
+//             dispatcher.setVolumeLogarithmic(10 / 100);
+//             //const audioStream = receiver.createPCMStream(user)
+//            //More code to do stuff with the audioStream
+//       })
       .on("finish", () => {
         if (collector && !collector.ended) collector.stop();
 
