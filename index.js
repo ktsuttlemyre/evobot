@@ -2,8 +2,7 @@
  * Module Imports
  */
 const Discord = require("discord.js");
-const Client = new Discord.Client();
-const Collection = Discord.Collection
+const { Client, Collection } = require("discord.js");
 const { readdirSync } = require("fs");
 const { join } = require("path");
 const { TOKEN, PREFIX, LOCALE , isDJOnly, DJ_ROLE} = require("./util/EvobotUtil");
