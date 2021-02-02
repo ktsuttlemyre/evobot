@@ -71,7 +71,7 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
     }
     let vol=0;
     console.log(member,member.bot,speaking)
-    if(speaking.equals(SILENCE){
+    if(speaking.equals(SILENCE)){
       vol=40;
     }else{
       vol=10;
