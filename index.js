@@ -64,25 +64,25 @@ for (const file of commandFiles) {
   client.commands.set(command.name, command);
 }
 
-// client.on("guildMemberSpeaking", async (member,speaking) => {
-//     let vol=0;
-//     console.log(member,speaking)
-//     if(speaking.has(Discord.Speaking.SPEAKING) ||
-//       speaking.has(Discord.Speaking.SOUNDSHARE) ||
-//       speaking.has(Discord.Speaking.PRIORITY_SPEAKING)){
-//       vol=10;
-//     }else{
-//       vol=40;
-//     }
-//     const queue = member.guild.client.queue.get(member.guild.id);
+client.on("guildMemberSpeaking", async (member,speaking) => {
+    let vol=0;
+    console.log(member,member.bot,speaking)
+    if(speaking.has(Discord.Speaking.SPEAKING) ||
+      speaking.has(Discord.Speaking.SOUNDSHARE) ||
+      speaking.has(Discord.Speaking.PRIORITY_SPEAKING)){
+      vol=10;
+    }else{
+      vol=40;
+    }
+    const queue = member.guild.client.queue.get(member.guild.id);
     
-//     //if (!queue) return message.reply(i18n.__("volume.errorNotQueue")).catch(console.error);
+    //if (!queue) return message.reply(i18n.__("volume.errorNotQueue")).catch(console.error);
 
-//     vol=Math.min(100,Math.max(0,vol))
+    vol=Math.min(100,Math.max(0,vol))
 
-//     queue.volume = vol;
-//     queue.connection.dispatcher.setVolumeLogarithmic(vol / 100);
-// });
+    queue.volume = vol;
+    queue.connection.dispatcher.setVolumeLogarithmic(vol / 100);
+});
 
 client.on("message", async (message) => {
   if (message.author.bot) return;
