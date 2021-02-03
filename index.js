@@ -70,24 +70,44 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
       return
     }
     const queue = member.guild.client.queue.get(member.guild.id);
+    if (!queue) return message.reply(i18n.__("volume.errorNotQueue")).catch(console.error);  
     if(!queue.attention){
-      return
+      queue.attention={
+        speaking:0, //how many users are talking in the channel
+        timeout=20, //seconds after talking to resume normal volume
+        min_volume:10 //attention volume (dampened)
+      }
     }
   
     let vol=0;
-    console.log(member,member.bot,speaking)
     if(speaking.equals(SILENCE)){
-      vol=40;
+      queue.attention.speaking--
+      queue.attention.speaking=Math.max(queue.attention.speaking-1,0);
+      if(!queue.attention.speaking){
+        queue.attention.toID=setTimeout(function(){
+          queue.attention.toID=0;
+          if(queue.attention.speaking){
+            return ;
+          }
+          let vol=queue.attention.original_volume;
+          queue.attention.dampen=false;
+          
+          queue.volume=vol;
+          queue.connection.dispatcher.setVolumeLogarithmic(vol / 100);
+        },queue.attention.timeout*1000)
+      }
     }else{
-      vol=10;
+      clearTimeout(queue.attention.toID);
+      queue.attention.speaking++;
+      if(queue.attention.dampen==true){
+        return
+      }
+      queue.attention.dampen=true;
+      
+      vol=queue.attention.min_volume;
     }
 
-    
-    //if (!queue) return message.reply(i18n.__("volume.errorNotQueue")).catch(console.error);
-
     vol=Math.min(100,Math.max(0,vol));
-
-    queue.volume = vol;
     queue.connection.dispatcher.setVolumeLogarithmic(vol / 100);
 });
 
