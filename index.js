@@ -74,7 +74,8 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
     if(!queue.attention){
       queue.attention={
         speaking:0, //how many users are talking in the channel
-        timeout:15, //seconds after talking to resume normal volume
+        timeout:10, //seconds after talking to resume normal volume
+        leadtime:3,
         min_volume:10 //attention volume (dampened)
       }
     }
