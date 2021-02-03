@@ -105,6 +105,7 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
       
       let vol=queue.attention.min_volume;
       vol=Math.min(100,Math.max(0,vol));
+      queue.attention.original_volume=queue.volume;
       queue.connection.dispatcher.setVolumeLogarithmic(vol / 100);
     }
 
