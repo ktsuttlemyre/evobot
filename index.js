@@ -74,12 +74,11 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
     if(!queue.attention){
       queue.attention={
         speaking:0, //how many users are talking in the channel
-        timeout:20, //seconds after talking to resume normal volume
+        timeout:15, //seconds after talking to resume normal volume
         min_volume:10 //attention volume (dampened)
       }
     }
   
-    let vol=0;
     if(speaking.equals(SILENCE)){
       queue.attention.speaking--
       queue.attention.speaking=Math.max(queue.attention.speaking-1,0);
@@ -104,7 +103,7 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
       }
       queue.attention.dampen=true;
       
-      vol=queue.attention.min_volume;
+      let vol=queue.attention.min_volume;
       vol=Math.min(100,Math.max(0,vol));
       queue.connection.dispatcher.setVolumeLogarithmic(vol / 100);
     }
