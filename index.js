@@ -89,11 +89,11 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
           if(queue.attention.speaking){
             return ;
           }
-          let vol=queue.attention.original_volume;
+          let volume=queue.attention.original_volume;
           queue.attention.dampen=false;
           
-          queue.volume=vol;
-          queue.connection.dispatcher.setVolumeLogarithmic(vol / 100);
+          queue.volume=volume;
+          queue.connection.dispatcher.setVolumeLogarithmic(volume / 100);
         },queue.attention.timeout*1000)
       }
     }else{
@@ -105,10 +105,11 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
       queue.attention.dampen=true;
       
       vol=queue.attention.min_volume;
+      vol=Math.min(100,Math.max(0,vol));
+      queue.connection.dispatcher.setVolumeLogarithmic(vol / 100);
     }
 
-    vol=Math.min(100,Math.max(0,vol));
-    queue.connection.dispatcher.setVolumeLogarithmic(vol / 100);
+
 });
 
 client.on("message", async (message) => {
