@@ -65,6 +65,9 @@ for (const file of commandFiles) {
   client.commands.set(command.name, command);
 }
 const SILENCE=new Discord.Speaking(0);
+
+
+
 client.on("guildMemberSpeaking", async (member,speaking) => {
     if(member.bot){
       return
@@ -77,40 +80,43 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
         timeout:10, //seconds after talking to resume normal volume
         leadtime:3,
         min_volume:10 //attention volume (dampened)
+        
       }
     }
   
-    if(speaking.equals(SILENCE)){
-      queue.attention.speaking--
-      queue.attention.speaking=Math.max(queue.attention.speaking-1,0);
-      if(!queue.attention.speaking){
-        queue.attention.toID=setTimeout(function(){
-          queue.attention.toID=0;
-          if(queue.attention.speaking){
-            return ;
-          }
-          let volume=queue.attention.original_volume;
-          queue.attention.dampen=false;
-          
-          queue.volume=volume;
-          queue.connection.dispatcher.setVolumeLogarithmic(volume / 100);
-        },queue.attention.timeout*1000)
-      }
-    }else{
-      clearTimeout(queue.attention.toID);
-      queue.attention.speaking++;
-      if(queue.attention.dampen==true){
-        return
-      }
-      queue.attention.dampen=true;
+    if(!speaking.equals(SILENCE)){ //talking
       
-      let vol=queue.attention.min_volume;
-      vol=Math.min(100,Math.max(0,vol));
-      queue.attention.original_volume=queue.volume;
-      queue.connection.dispatcher.setVolumeLogarithmic(vol / 100);
+      //save original volume
+      if(!queue.attention.speaking){
+        queue.attention.original_volume=queue.volume;
+      }
+      
+      //count the speaking population
+      queue.attention.speaking++;
+      
+      //create setInterval function
+      if(!queue.attention.toID){
+        queue.attention.toID = setInterval(function(){
+          if(queue.speaking){
+            if(queue.volume>queue.attention.min_volume){
+              let vol = queue.volume-3;
+              vol = Math.min(100,Math.max(queue.attention.min_volume,vol));
+              queue.volume=vol;
+              queue.connection.dispatcher.setVolumeLogarithmic(vol / 100);
+            }
+          }else{//not speaking
+            if(queue.volume<queue.attention.original_volume){
+              let volume=queue.volume+1;
+              queue.volume=volume;
+              queue.connection.dispatcher.setVolumeLogarithmic(volume / 100);
+            }
+          }
+        },250);
+      }
+    }else{ //not talking
+      queue.attention.speaking--;
+      queue.attention.speaking=Math.max(queue.attention.speaking-1,0);
     }
-
-
 });
 
 client.on("message", async (message) => {
