@@ -67,7 +67,6 @@ for (const file of commandFiles) {
 const SILENCE=new Discord.Speaking(0);
 
 
-
 client.on("guildMemberSpeaking", async (member,speaking) => {
     if(member.bot){
       return
@@ -112,9 +111,10 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
             }else{
               clearInterval(queue.attention.toID);
               queue.attention.toID=0;
+            }
           }
-        },250);
-      }
+    	},250);
+    }
     }else{ //not talking
       queue.attention.speaking--;
       queue.attention.speaking=Math.max(queue.attention.speaking-1,0);
