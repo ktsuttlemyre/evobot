@@ -109,7 +109,9 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
               let volume=queue.volume+1;
               queue.volume=volume;
               queue.connection.dispatcher.setVolumeLogarithmic(volume / 100);
-            }
+            }else{
+              clearInterval(queue.attention.toID);
+              queue.attention.toID=0;
           }
         },250);
       }
