@@ -78,6 +78,7 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
 	console.log('not speaking',queue.speaking)
     	attention.speaking=Math.max(--attention.speaking,0);
     }else{
+      attention.counter=5*4; //5 seconds* 4fps
       console.log('speaking',attention.speaking)
       //count the speaking population
       attention.speaking++;
@@ -104,6 +105,11 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
           }else{//not speaking
             console.log('not speaking interval',attention.speaking)
             if(queue.volume<attention.original_volume){
+              if(attention.counter>0){
+                attention.counter--;
+		console.log('dampened wait')
+		return
+	      }
 	      console.log('vol up',attention.speaking,queue.volume)
               // get and add
               let volume=queue.volume+1;
