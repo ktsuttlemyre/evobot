@@ -78,7 +78,7 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
 	console.log('not speaking',queue.speaking)
     	attention.speaking=Math.max(--attention.speaking,0);
     }else{
-      attention.counter=5*4; //5 seconds* 4fps
+      attention.counter=attention.lag_time * attention.fps; //5 seconds* 4fps
       console.log('speaking',attention.speaking)
       //count the speaking population
       attention.speaking++;
@@ -95,7 +95,7 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
             if(queue.volume>attention.min_volume){
               console.log('vol down',attention.speaking,queue.volume)
               //get volume
-              let vol = queue.volume-3;
+              let vol = queue.volume-((attention.original_volume - attention.min_volume)/(attention.lead_time * attention.fps));
               //clamp value
               vol = Math.min(100,Math.max(attention.min_volume,vol));
               //set volume
@@ -112,7 +112,7 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
 	      }
 	      console.log('vol up',attention.speaking,queue.volume)
               // get and add
-              let volume=queue.volume+1;
+              let volume=queue.volume+((attention.original_volume - attention.min_volume)/(attention.recover_time * attention.fps));;
               // set
               queue.volume=volume;
               queue.connection.dispatcher.setVolumeLogarithmic(volume / 100);
@@ -121,7 +121,7 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
               attention.toID=0;
             }
           }
-    	},250);
+    	},1000/attention.fps);
       }
     }
 });
