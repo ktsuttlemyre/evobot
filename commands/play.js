@@ -73,9 +73,10 @@ module.exports = {
       volume: DEFAULT_VOLUME || 100,
       attention:{
         speaking:0, //how many users are talking in the channel
-        lead_time:3, //lead time is 3 seconds to get to min volume
-        lag_time:10, //hold the volume at min volume for 5 seconds
-        recover_time:10, // 10 seconds to return volume to normal after lag period
+        noise_tolerance_time:.5, //filter out small noises like coughing
+        decrescendo_time:3, //lead time is 3 seconds to get to min volume
+        attention_patience:10, //hold the volume at min volume for 5 seconds
+        crescendo_time:10, // 10 seconds to return volume to normal after lag period
         fps:4, //turn this up for smoother volume transitions or down to save cpu load
         counter:0,
         min_volume:10, //attention volume (dampened)
