@@ -75,7 +75,6 @@ module.exports = {
         speaking:0, //how many users are talking in the channel
         timeout:10, //seconds after talking to resume normal volume
         leadtime:3,
-        talking:0,
         min_volume:10, //attention volume (dampened)
         on:false
       },
