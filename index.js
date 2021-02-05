@@ -78,7 +78,7 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
 	console.log('not speaking',queue.speaking)
     	attention.speaking=Math.max(--attention.speaking,0);
     }else{
-      attention.counter=attention.lag_time * attention.fps; //5 seconds* 4fps
+      attention.patience_ticks=attention.attention_patience * attention.fps; // seconds*fps
       console.log('speaking',attention.speaking)
       //count the speaking population
       attention.speaking++;
@@ -91,11 +91,14 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
         
         attention.toID = setInterval(function(){
           if(attention.speaking){
-            console.log('speaking interval',attention.speaking)
+            console.log('speaking interval',attention.speaking);
+            //if(queue.volume == attention.original_volume){
+		//attention.tolerance_ticks--
+	    //}
             if(queue.volume>attention.min_volume){
               console.log('vol down',attention.speaking,queue.volume)
               //get volume
-              let vol = queue.volume-((attention.original_volume - attention.min_volume)/(attention.lead_time * attention.fps));
+              let vol = queue.volume-((attention.original_volume - attention.min_volume)/(attention.decrescendo_time * attention.fps));
               //clamp value
               vol = Math.min(100,Math.max(attention.min_volume,vol));
               //set volume
@@ -105,14 +108,14 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
           }else{//not speaking
             console.log('not speaking interval',attention.speaking)
             if(queue.volume<attention.original_volume){
-              if(queue.volume == attention.min_volume && attention.counter>0){
-                attention.counter--;
+              if(queue.volume == attention.min_volume && attention.patience_ticks>0){
+                attention.patience_ticks--;
 		console.log('dampened wait')
 		return
 	      }
 	      console.log('vol up',attention.speaking,queue.volume)
               // get and add
-              let volume=queue.volume+((attention.original_volume - attention.min_volume)/(attention.recover_time * attention.fps));;
+              let volume=queue.volume+((attention.original_volume - attention.min_volume)/(attention.crescendo_time * attention.fps));;
               // set
               queue.volume=volume;
               queue.connection.dispatcher.setVolumeLogarithmic(volume / 100);
