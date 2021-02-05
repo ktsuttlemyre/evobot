@@ -76,7 +76,7 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
   
     if(speaking.equals(SILENCE)){ //not talking
 	console.log('not speaking',queue.speaking)
-    	attention.speaking=Math.max(attention.speaking--,0);
+    	attention.speaking=Math.max(--attention.speaking,0);
     }else{
       console.log('speaking',attention.speaking)
       //count the speaking population
