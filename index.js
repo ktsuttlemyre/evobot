@@ -105,7 +105,7 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
           }else{//not speaking
             console.log('not speaking interval',attention.speaking)
             if(queue.volume<attention.original_volume){
-              if(attention.counter>0){
+              if(queue.volume == attention.min_volume && attention.counter>0){
                 attention.counter--;
 		console.log('dampened wait')
 		return
