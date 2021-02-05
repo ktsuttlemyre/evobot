@@ -74,10 +74,10 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
     if (!queue) return message.reply(i18n.__("volume.errorNotQueue")).catch(console.error);  
   
     if(speaking.equals(SILENCE)){ //not talking
-	console.log('not talking',queue.talking)
+	console.log('not speaking',queue.speaking)
     	queue.attention.speaking=Math.max(queue.attention.speaking--,0);
     }else{
-      console.log('talking',queue.talking)
+      console.log('speaking',queue.speaking)
       //count the speaking population
       queue.attention.speaking++;
 
@@ -91,9 +91,9 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
 
         queue.attention.toID = setInterval(function(){
           if(queue.speaking){
-            console.log('speaking interval',queue.talking)
+            console.log('speaking interval',queue.speaking)
             if(queue.volume>queue.attention.min_volume){
-              console.log('vol down',queue.talking,queue.volume)
+              console.log('vol down',queue.speaking,queue.volume)
               //get volume
               let vol = queue.volume-3;
               //clamp value
@@ -103,9 +103,9 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
               queue.connection.dispatcher.setVolumeLogarithmic(vol / 100);
             }
           }else{//not speaking
-            console.log('not speaking interval',queue.talking)
+            console.log('not speaking interval',queue.speaking)
             if(queue.volume<queue.attention.original_volume){
-	      console.log('vol up',queue.talking,queue.volume)
+	      console.log('vol up',queue.speaking,queue.volume)
               // get and add
               let volume=queue.volume+1;
               // set
