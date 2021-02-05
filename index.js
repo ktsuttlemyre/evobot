@@ -85,11 +85,9 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
 
       //create setInterval function
       if(attention.on && !attention.toID){
-	    //save original volume
-        if(!attention.speaking){
-          attention.original_volume=queue.volume;
-        }
-
+	//save original volume
+        attention.original_volume=queue.volume;
+        
         attention.toID = setInterval(function(){
           if(attention.speaking){
             console.log('speaking interval',attention.speaking)
