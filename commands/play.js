@@ -73,10 +73,13 @@ module.exports = {
       volume: DEFAULT_VOLUME || 100,
       attention:{
         speaking:0, //how many users are talking in the channel
-        timeout:10, //seconds after talking to resume normal volume
-        leadtime:3,
+        lead_time:2, //lead time is 3 seconds to get to min volume
+        lag_time:10, //hold the volume at min volume for 5 seconds
+        recover_time:7, // 10 seconds to return volume to normal after lag period
+        fps:4, //turn this up for smoother volume transitions or down to save cpu load
+        counter:0,
         min_volume:10, //attention volume (dampened)
-        on:false
+        on:false //turn feature on and off
       },
       playing: true
     };
