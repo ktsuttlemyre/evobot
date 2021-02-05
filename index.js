@@ -66,46 +66,43 @@ for (const file of commandFiles) {
 }
 const SILENCE=new Discord.Speaking(0);
 
-
 client.on("guildMemberSpeaking", async (member,speaking) => {
     if(member.bot){
       return
     }
     const queue = member.guild.client.queue.get(member.guild.id);
     if (!queue) return message.reply(i18n.__("volume.errorNotQueue")).catch(console.error);  
-    if(!queue.attention){
-      queue.attention={
-        speaking:0, //how many users are talking in the channel
-        timeout:10, //seconds after talking to resume normal volume
-        leadtime:3,
-        min_volume:10 //attention volume (dampened)
-        
-      }
-    }
   
-    if(!speaking.equals(SILENCE)){ //talking
-      
-      //save original volume
-      if(!queue.attention.speaking){
-        queue.attention.original_volume=queue.volume;
-      }
-      
+    if(speaking.equals(SILENCE)){ //not talking
+    	queue.attention.speaking=Math.max(queue.attention.speaking--,0);
+    }else{
       //count the speaking population
       queue.attention.speaking++;
-      
+
+
       //create setInterval function
-      if(!queue.attention.toID){
+      if(queue.attention.on && !queue.attention.toID){
+	    //save original volume
+        if(!queue.attention.speaking){
+          queue.attention.original_volume=queue.volume;
+        }
+
         queue.attention.toID = setInterval(function(){
           if(queue.speaking){
             if(queue.volume>queue.attention.min_volume){
+              //get volume
               let vol = queue.volume-3;
+              //clamp value
               vol = Math.min(100,Math.max(queue.attention.min_volume,vol));
+              //set volume
               queue.volume=vol;
               queue.connection.dispatcher.setVolumeLogarithmic(vol / 100);
             }
           }else{//not speaking
             if(queue.volume<queue.attention.original_volume){
+              // get and add
               let volume=queue.volume+1;
+              // set
               queue.volume=volume;
               queue.connection.dispatcher.setVolumeLogarithmic(volume / 100);
             }else{
@@ -114,13 +111,9 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
             }
           }
     	},250);
-    }
-    }else{ //not talking
-      queue.attention.speaking--;
-      queue.attention.speaking=Math.max(queue.attention.speaking-1,0);
+      }
     }
 });
-
 client.on("message", async (message) => {
   if (message.author.bot) return;
   if (!message.guild) return;
