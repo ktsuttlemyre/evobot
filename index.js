@@ -71,49 +71,50 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
       return
     }
     const queue = member.guild.client.queue.get(member.guild.id);
+    const attention = queue.attention;
     if (!queue) return message.reply(i18n.__("volume.errorNotQueue")).catch(console.error);  
   
     if(speaking.equals(SILENCE)){ //not talking
 	console.log('not speaking',queue.speaking)
-    	queue.attention.speaking=Math.max(queue.attention.speaking--,0);
+    	attention.speaking=Math.max(attention.speaking--,0);
     }else{
-      console.log('speaking',queue.speaking)
+      console.log('speaking',attention.speaking)
       //count the speaking population
-      queue.attention.speaking++;
+      attention.speaking++;
 
 
       //create setInterval function
-      if(queue.attention.on && !queue.attention.toID){
+      if(attention.on && !attention.toID){
 	    //save original volume
-        if(!queue.attention.speaking){
-          queue.attention.original_volume=queue.volume;
+        if(!attention.speaking){
+          attention.original_volume=queue.volume;
         }
 
-        queue.attention.toID = setInterval(function(){
-          if(queue.speaking){
-            console.log('speaking interval',queue.speaking)
-            if(queue.volume>queue.attention.min_volume){
-              console.log('vol down',queue.speaking,queue.volume)
+        attention.toID = setInterval(function(){
+          if(attention.speaking){
+            console.log('speaking interval',attention.speaking)
+            if(queue.volume>attention.min_volume){
+              console.log('vol down',attention.speaking,queue.volume)
               //get volume
               let vol = queue.volume-3;
               //clamp value
-              vol = Math.min(100,Math.max(queue.attention.min_volume,vol));
+              vol = Math.min(100,Math.max(attention.min_volume,vol));
               //set volume
               queue.volume=vol;
               queue.connection.dispatcher.setVolumeLogarithmic(vol / 100);
             }
           }else{//not speaking
-            console.log('not speaking interval',queue.speaking)
-            if(queue.volume<queue.attention.original_volume){
-	      console.log('vol up',queue.speaking,queue.volume)
+            console.log('not speaking interval',attention.speaking)
+            if(queue.volume<attention.original_volume){
+	      console.log('vol up',attention.speaking,queue.volume)
               // get and add
               let volume=queue.volume+1;
               // set
               queue.volume=volume;
               queue.connection.dispatcher.setVolumeLogarithmic(volume / 100);
             }else{
-              clearInterval(queue.attention.toID);
-              queue.attention.toID=0;
+              clearInterval(attention.toID);
+              attention.toID=0;
             }
           }
     	},250);
