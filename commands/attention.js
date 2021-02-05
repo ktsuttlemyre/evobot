@@ -15,6 +15,6 @@ module.exports = {
       return message.reply(i18n.__("volume.errorNotChannel")).catch(console.error);
 
     queue.attention.on = !queue.attention.on;
-    return queue.textChannel.send(i18n.__mf("attention.result", { arg: queue.attention })).catch(console.error);
+    return queue.textChannel.send(i18n.__mf("attention.result", { arg: queue.attention.on })).catch(console.error);
   }
 };
