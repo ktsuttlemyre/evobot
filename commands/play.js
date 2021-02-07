@@ -78,7 +78,6 @@ module.exports = {
         attention_patience:10, //hold the volume at min volume for 5 seconds
         crescendo_time:10, // 10 seconds to return volume to normal after lag period
         fps:4, //turn this up for smoother volume transitions or down to save cpu load
-        counter:0,
         min_volume:10, //attention volume (dampened)
         on:false //turn feature on and off
       },
