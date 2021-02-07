@@ -74,7 +74,7 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
     const attention = queue.attention;
     if (!queue) return message.reply(i18n.__("volume.errorNotQueue")).catch(console.error);  
   
-    if(speaking.equals(SILENCE)){ //not talking
+    if(speaking.equals(SILENCE) || member.voice.mute){ // || member.voice.streaming){ //not talking
 	console.log('not speaking',queue.speaking)
     	attention.speaking=Math.max(--attention.speaking,0);
     }else{
@@ -90,11 +90,15 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
         attention.original_volume=queue.volume;
         
         attention.toID = setInterval(function(){
-          if(attention.speaking){
+          if(attention.speaking>0){
             console.log('speaking interval',attention.speaking);
             //if(queue.volume == attention.original_volume){
 		//attention.tolerance_ticks--
 	    //}
+            if(attention.start_sample_ticks>0){
+	      attention.start_sample_ticks--;
+	      return;
+	    }
             if(queue.volume>attention.min_volume){
               console.log('vol down',attention.speaking,queue.volume)
               //get volume
@@ -107,6 +111,9 @@ client.on("guildMemberSpeaking", async (member,speaking) => {
             }
           }else{//not speaking
             console.log('not speaking interval',attention.speaking)
+            if(attention.speaking<=0){
+		attention.start_sample_ticks=4; //one second
+	    }
             if(queue.volume<attention.original_volume){
               if(queue.volume == attention.min_volume && attention.patience_ticks>0){
                 attention.patience_ticks--;
