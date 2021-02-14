@@ -46,7 +46,7 @@ function fetchTokens(){
     fs.writeFileSync(path,data)
     let tokens = fs.readFileSync(path,'utf8')
     tokens.discord=process.env.SHIPMOD_TOKEN;
-    tokens.database=process.env.POSTGRES_URL;
+    tokens.database=process.env.DATABASE_URL;
     return JSON.parse(tokens)
   }
 }
