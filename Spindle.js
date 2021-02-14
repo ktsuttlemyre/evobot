@@ -16,11 +16,12 @@ let postGres = require('pg')
 
 let bot = new Eris(tokens.discord);
 let db = new postGres.Client({
-  user: process.env.POSTGRES_USER,
-  host: process.env.POSTGRES_HOST,
-  database: process.env.POSTGRES_DB,
-  password: process.env.POSTGRES_PASSWORD,
-  port: process.env.PORT,
+  connectionString:process.env.DATABASE_URL
+//  user: process.env.POSTGRES_USER,
+//  host: process.env.POSTGRES_HOST,
+//  database: process.env.POSTGRES_DB,
+//  password: process.env.POSTGRES_PASSWORD,
+//  port: process.env.PORT,
 })
 
 startup()
