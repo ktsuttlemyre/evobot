@@ -20,9 +20,9 @@ let db = new postGres.Client(tokens.database)
 startup()
 
 function startup(){ //connects to postgres, fetches the guild cashe, and connects to discord
-  if (tokens.discord === configHandler.defaultTokens.discord || !(tokens.discord)){
+  if (!(tokens.discord)){
     console.log("**********************************************************************\n****** please place your discord bot token into the tokens file ******\n**********************************************************************")
-    } else if (tokens.database === configHandler.defaultTokens.database || !(tokens.database)) {
+    } else if (!(tokens.database)) {
       console.log("**********************************************************************\n**** please place your postgres database url into the tokens file ****\n**********************************************************************")
     } else {
       console.log("connecting to postgres...")
