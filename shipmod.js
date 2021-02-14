@@ -6,6 +6,10 @@ let evobot;
   evobot = require("/app/index.js");
 })();
 
+(function main(){
+  spindle = require("/app/Spindle.js");
+})();
+
 (function shipmod(){
   const { Client, Collection } = require("discord.js");
   const { readdirSync } = require("fs");
