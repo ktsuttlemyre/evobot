@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-const defaultTokens = {configVersion:1,discord:process.env.SHIPMOD_TOKEN,database:process.env.POSGRES_URL}
+const defaultTokens = {configVersion:1,discord:"place your discord bot token here.",database:"place your postGres database url here."}
 const defaultConfig = {configVersion:1,commandChar:process.env.PREFIX,maxLinkedChannels:2}
 
 //maybe at some point make this async? not sure if its worth the time investment given that the code only runs at startup
@@ -45,6 +45,8 @@ function fetchTokens(){
     let data = JSON.stringify(defaultTokens, null, 2);
     fs.writeFileSync(path,data)
     let tokens = fs.readFileSync(path,'utf8')
+    tokens.discord=process.env.SHIPMOD_TOKEN;
+    tokens.database=process.env.POSGRES_URL;
     return JSON.parse(tokens)
   }
 }
