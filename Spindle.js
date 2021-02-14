@@ -13,10 +13,11 @@ var tokens = configHandler.fetchTokens();
 //node modules
 let Eris = require('eris')
 let postGres = require('pg')
+postGres.defaults.ssl = true;
 
 let bot = new Eris(tokens.discord);
 let db = new postGres.Client({
-  connectionString:process.env.DATABASE_URL
+  connectionString:process.env.DATABASE_URL+'sslmode=require';
 //  user: process.env.POSTGRES_USER,
 //  host: process.env.POSTGRES_HOST,
 //  database: process.env.POSTGRES_DB,
