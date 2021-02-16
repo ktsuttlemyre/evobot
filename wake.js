@@ -83,7 +83,7 @@ function wakeHandler(client){
   var ttl=30*60*1000;
   let channels = Guild.channels.filter(c => c.type == 'text').array();
   for (let channel of channels) {
-    await channel.messages.fetch()
+    channel.messages.fetch()
       .then(messages => {
         messages.forEach(function(message){
           if(message.author.bot){
