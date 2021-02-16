@@ -81,7 +81,7 @@ function wakeHandler(client){
   
   //see if theres a message in a text channel that is less than 30 minutes old
   var ttl=30*60*1000;
-  let channels = Guild.channels.filter(c => c.type == 'text').array();
+  let channels = Guild.channels.cache.filter(c => c.type == 'text').array();
   for (let channel of channels) {
     channel.messages.fetch()
       .then(function(messages){
