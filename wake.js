@@ -102,7 +102,7 @@ function wakeHandler(client){
 //     }
 //   }
 
-  var keptAlive=Guild.members.cache.some(function(member){
+  Guild.members.cache.some(function(member){
     if(member.user.bot){
       return false;
     }
@@ -118,17 +118,27 @@ function wakeHandler(client){
       //  console.log(`${member.user.tag} is not connected.`);
     //};
 
-    //see if last message was 30 minutes old
-    var ttl=30*60*1000;
-    var lastMessage= member.lastMessage;
-    if(lastMessage){
-      var date = lastMessage.createdAt
-      if((Date.now() - date) < ttl) { //is user active in the last 30 minutes?
-         keepAlive(member.displayName+' sent a message recently');
-         return true
-      }
-    }
+
   }); //end some
+  
+  //see if theres a message in a text channel that is less than 30 minutes old
+  var ttl=30*60*1000;
+  let channels = Guild.channels.filter(c => c.type == 'text').array();
+  for (let channel of channels) {
+    await channel.messages.fetch()
+      .then(messages => {
+        messages.forEach(function(message){
+          if(message.author.bot){
+            return
+          }
+          if((Date.now() - message.createdAt) < ttl) { //is user active in the last 30 minutes?
+             keepAlive('last message to guild was less than 10 minutes old from '+ message.author.username);
+          }
+      })
+      .catch(console.error);
+  }
+  
+  
 };
 
 
