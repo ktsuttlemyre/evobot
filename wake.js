@@ -1,13 +1,8 @@
 const { Client, Collection } = require("discord.js");
-const { readdirSync } = require("fs");
-const { join } = require("path");
 let { TOKEN, PREFIX, LOCALE } = require("./util/EvobotUtil");
-PREFIX =  ']';
 TOKEN = process.env.SHIPMOD_TOKEN;
-const path = require("path");
-const i18n = require("i18n");
 
-const voiceLink = require('./modules/voicetext-channel-linking.js')
+const request = require('request');
 
 const client = new Client({ 
   disableMentions: "everyone",
@@ -15,37 +10,6 @@ const client = new Client({
 });
 
 client.login(TOKEN);
-client.commands = new Collection();
-client.prefix = PREFIX;
-client.queue = new Map();
-const cooldowns = new Collection();
-const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-
-i18n.configure({
-  locales: ["en", "es", "ko", "fr", "tr", "pt_br", "zh_cn", "zh_tw"],
-  directory: path.join(__dirname, "locales"),
-  defaultLocale: "en",
-  objectNotation: true,
-  register: global,
-
-  logWarnFn: function (msg) {
-    console.log("warn", msg);
-  },
-
-  logErrorFn: function (msg) {
-    console.log("error", msg);
-    process.exit(1);
-  },
-
-  missingKeyFn: function (locale, value) {
-    return value;
-  },
-
-  mustacheConfig: {
-    tags: ["{{", "}}"],
-    disable: false
-  }
-});
 
 /**
  * Client Events
@@ -65,9 +29,6 @@ client.on("error", (e) => {
 });
 
 
-
-
-const request = require('request');
 let lastKeepAlive=null;
 function keepAlive(string){
   var website="https://"+process.env.HEROKU_APP_NAME+".herokuapp.com";
@@ -84,8 +45,6 @@ function keepAlive(string){
     //console.log(body.explanation);
   });
 };
-
-
 
 
 
