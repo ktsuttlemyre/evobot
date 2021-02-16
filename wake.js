@@ -1,6 +1,5 @@
 const { Client, Collection } = require("discord.js");
-let { TOKEN, PREFIX, LOCALE } = require("./util/EvobotUtil");
-TOKEN = process.env.SHIPMOD_TOKEN;
+var TOKEN = process.env.SHIPMOD_TOKEN;
 
 const request = require('request');
 
