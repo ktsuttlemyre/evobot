@@ -84,21 +84,19 @@ function wakeHandler(client){
   let channels = Guild.channels.filter(c => c.type == 'text').array();
   for (let channel of channels) {
     channel.messages.fetch()
-      .then(messages => {
-        messages.forEach(function(message){
-          if(message.author.bot){
-            return
-          }
-          if((Date.now() - message.createdAt) < ttl) { //is user active in the last 30 minutes?
-             keepAlive('last message to guild was less than 10 minutes old from '+ message.author.username);
-          }
+      .then(function(messages){
+          messages.forEach(function(message){
+            if(message.author.bot){
+              return
+            }
+            if((Date.now() - message.createdAt) < ttl) { //is user active in the last 30 minutes?
+               keepAlive('last message to guild was less than 10 minutes old from '+ message.author.username);
+            }
+          })
       })
       .catch(console.error);
   }
   
   
 };
-
-
-
 
