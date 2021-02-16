@@ -18,7 +18,7 @@ client.on("ready", () => {
   //console.log(`${client.user.username} ready!`);
   //client.user.setActivity(`${PREFIX}help and ${PREFIX}play`, { type: "LISTENING" });
   wakeHandler(client);
-  client.destroy();
+  //client.destroy();
 });
 client.on("warn", (info) => {
   console.log(info);
