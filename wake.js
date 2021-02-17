@@ -97,7 +97,7 @@ function wakeHandler(client){
               return
             }
             if((Date.now() - message.createdAt) < ttl) { //is user active in the last 30 minutes?
-               keepAlive('last message to guild was less than '+ttlm+' minutes old from '+ message.author.username);
+               keepAlive('Last message to guild was <'+ttlm+' minutes in channel['+channel.name+'] from user['+ message.author.username+']');
             }
           })
       })
@@ -105,7 +105,7 @@ function wakeHandler(client){
     promises.push(p);
   }
   Promise.all(promises).then((values) => {
-    console.log('checked all available channels.')
+    //console.log('Checked all available channels.')
     if(!pinging){
       process.exit(0);
     }
