@@ -29,7 +29,9 @@ client.on("error", (e) => {
 
 
 let lastKeepAlive=null;
+var pinging=false;
 function keepAlive(string){
+  pinging=true;
   var website="https://"+process.env.HEROKU_APP_NAME+".herokuapp.com";
   console.log('KeepAlive - Pinging '+website+' for reason:'+string);
   request(website, function(err, res, body){
@@ -102,8 +104,10 @@ function wakeHandler(client){
     promises.push(p);
   }
   Promise.all(promises).then((values) => {
-    console.log('checked all available channels. exiting')
-    Process.exit(0)
+    console.log('checked all available channels.')
+    if(!pinging){
+      process.exit(0);
+    }
   });
   
   
