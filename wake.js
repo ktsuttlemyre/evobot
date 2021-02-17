@@ -102,6 +102,7 @@ function wakeHandler(client){
     promises.push(p);
   }
   Promise.all(promises).then((values) => {
+    console.log('checked all available channels. exiting')
     Process.exit(0)
   });
   
