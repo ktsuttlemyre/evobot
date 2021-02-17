@@ -82,11 +82,12 @@ function wakeHandler(client){
   //see if theres a message in a text channel that is less than 30 minutes old
   var ttl=30*60*1000;
   let channels = Guild.channels.cache.filter(c => c.type == 'text').array();
+  var promises=[]
   for (let channel of channels) {
     if(!(channel.permissionsFor(Guild.me).has("VIEW_CHANNEL"))){
       continue;
     }
-    channel.messages.fetch()
+    var p=channel.messages.fetch()
       .then(function(messages){
           messages.forEach(function(message){
             if(message.author.bot){
@@ -98,7 +99,11 @@ function wakeHandler(client){
           })
       })
       .catch(console.error);
+    promises.push(p);
   }
+  Promise.all(promises).then((values) => {
+    Process.exit(0)
+  });
   
   
 };
