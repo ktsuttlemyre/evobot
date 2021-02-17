@@ -83,7 +83,7 @@ function wakeHandler(client){
   var ttl=30*60*1000;
   let channels = Guild.channels.cache.filter(c => c.type == 'text').array();
   for (let channel of channels) {
-    if(!channel.permissionsFor(Guild.me).hasPermission(“VIEW_CHANNEL”)){
+    if(!(channel.permissionsFor(Guild.me).hasPermission("VIEW_CHANNEL"))){
       continue;
     }
     channel.messages.fetch()
