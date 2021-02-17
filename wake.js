@@ -82,7 +82,8 @@ function wakeHandler(client){
   }); //end some
   
   //see if theres a message in a text channel that is less than 30 minutes old
-  var ttl=30*60*1000;
+  var ttlm=30;
+  var ttl=ttlm*60*1000;
   let channels = Guild.channels.cache.filter(c => c.type == 'text').array();
   var promises=[]
   for (let channel of channels) {
@@ -96,7 +97,7 @@ function wakeHandler(client){
               return
             }
             if((Date.now() - message.createdAt) < ttl) { //is user active in the last 30 minutes?
-               keepAlive('last message to guild was less than 10 minutes old from '+ message.author.username);
+               keepAlive('last message to guild was less than '+ttlm+' minutes old from '+ message.author.username);
             }
           })
       })
