@@ -39,7 +39,7 @@ function keepAlive(string){
       console.log(err);
       process.exit(1);
     }
-    console.log('successfully pinged '+website);
+    console.log('Successfully pinged');
     lastKeepAlive=Date.now();
     process.exit(0);
     //console.log(body.url);
